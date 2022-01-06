@@ -2,15 +2,17 @@
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
 	<!-- 암호화처리 bean등록 -->
 	<beans:bean
 		id="bcryptPasswordEncoder"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 	<beans:bean id="customSuccessHandler" class="com.kh.spring.member.controller.CustomSuccessHandler"/>
-		
+	
 	<!-- #3. 인증/권한 검사 설정 -->
 	<!-- 정적파일은 security체크하지 않음 -->
 	<http pattern="/resources/**" security="none"/>
@@ -35,6 +37,8 @@
 			login-processing-url : 로그인 처리요청 POST (핸들러 작성 않음)
 			default-target-url="/" : 로그인 성공시 리다이렉트할 페이지 '/' = 인덱스페이지
 			always-use-default-target="false" : 로그인 성공시 그 전 페이지로 이동(false) / true - default-target-url 페이지로 이동
+			authentication-failure-forward-url="" : 성공 후 포워딩할 url 
+				- member/memberLoginSuccess.do 핸들러 작성해둘 것.
 		 -->
 		<form-login
 			login-page="/member/memberLogin.do"
@@ -55,21 +59,23 @@
 	</http>
 	
 	<authentication-manager>
-		<authentication-provider>
+		<authentication-provider user-service-ref="securityService">
 			<!-- 비밀번호 암호화 -->
 			<password-encoder ref="bcryptPasswordEncoder"/>
-			<!-- 실제 사용자를 관리 -->
-			<user-service>
-				<user 
-					name="honggd" 
-					password="$2a$10$onEqov/JYmfmcbC14ZdOmeYsP61ZXROS0LJEp7cGzTAVlGPkSUGga"
-					authorities="ROLE_USER"/>
-				<user 
-					name="admin" 
-					password="$2a$10$QPmAgPhgRcpbEUdagZGAQetSwoKlU4jeKGTElMIfgkgMUx/VZ6YW2"
-					authorities="ROLE_USER, ROLE_ADMIN"/>
-			</user-service>
 		</authentication-provider>
 	</authentication-manager>
 	
+	<!-- com.kh.security 하위 클래스 빈등록 -->
+	<context:component-scan base-package="com.kh.security"/>
+	
 </beans:beans>
+
+
+
+
+
+
+
+
+
+
