@@ -55,6 +55,15 @@
 		
 		<!-- 모든 POST요청에 csrf토큰값을 검증한다. 기본값 false -->
 		<csrf disabled="false"/>
+		
+		<!-- Remember Me 등록 -->
+		<!-- token-validity-seconds 리멤버미 토큰 유효시간(초) 60 * 60 * 24 * 14  -->
+		<remember-me
+			data-source-ref="dataSource"
+			token-validity-seconds="1209600"/>
+			
+		<!-- 403 페이지 처리 -->
+		<access-denied-handler error-page="/error/accessDenied.do"/>
 			
 	</http>
 	

@@ -28,7 +28,7 @@ $(() => {
 	$(loginModal)
 		.modal()
 		.on("hide.bs.modal", (e) => {
-			location.href = '${empty header.referer ? pageContext.request.contextPath : header.referer}';
+			location.href = '${empty header.referer || header.referer.contains('/member/memberLogin.do') ? pageContext.request.contextPath : header.referer}';
 		});
 		
 });
@@ -66,9 +66,15 @@ $(() => {
 							type="password" class="form-control" name="password" value="1234"
 							placeholder="비밀번호" required>
 					</div>
-					<div class="modal-footer">
-						<button type="submit" class="btn btn-outline-success">로그인</button>
-						<button type="button" class="btn btn-outline-success" data-dismiss="modal">취소</button>
+					<div class="modal-footer justify-content-between">
+						<div>
+							<input type="checkbox"class="form-check-input" name="remember-me" id="remember-me" />
+							<label for="remember-me">Remember me</label>
+						</div>
+						<div>
+							<button type="submit" class="btn btn-outline-success">로그인</button>
+							<button type="button" class="btn btn-outline-success" data-dismiss="modal">취소</button>
+						</div>
 					</div>
 				</form:form>
 			</div>
